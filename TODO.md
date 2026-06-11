@@ -53,8 +53,9 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
 
 ## 5. Supabase als Datenbank (Projekt ist angelegt)
 
-Es fehlt nur noch der **Transaction-Pooler-Connection-String** (Port 6543):
-- Supabase-Projekt → oben **Connect** → **Connection string** → **Transaction
+Es fehlt nur noch der **Session-Pooler-Connection-String** (Port 5432, ideal
+für den dauerhaft laufenden Server):
+- Supabase-Projekt → oben **Connect** → **Connection string** → **Session
   pooler** → URI kopieren, `[YOUR-PASSWORD]` durch das DB-Passwort ersetzen.
 - Den fertigen String an mich geben → ich trage ihn als `DATABASE_URL` in
   `/opt/TrueLabel/.env` ein und starte neu (`pm2 restart truelabel`). Schema +
