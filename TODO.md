@@ -51,19 +51,12 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
   - Signing-Secret → `STRIPE_WEBHOOK_SECRET=whsec_…`
 - [ ] *Einstellungen → Billing → Customer Portal* aktivieren (für „Abo verwalten“)
 
-## 5. Supabase als Datenbank (Projekt ist angelegt)
+## 5. Supabase als Datenbank ✅ verbunden
 
-Es fehlt nur noch der **Session-Pooler-Connection-String** (Port 5432, ideal
-für den dauerhaft laufenden Server):
-- Supabase-Projekt → oben **Connect** → **Connection string** → **Session
-  pooler** → URI kopieren, `[YOUR-PASSWORD]` durch das DB-Passwort ersetzen.
-- Den fertigen String an mich geben → ich trage ihn als `DATABASE_URL` in
-  `/opt/TrueLabel/.env` ein und starte neu (`pm2 restart truelabel`). Schema +
-  Seed legt die App beim ersten Connect selbst an — kein SQL nötig.
-- Kein Passwort mehr zur Hand? Supabase → *Project Settings → Database →
-  Reset database password* → neues kopieren.
-- Hinweis: Ohne `DATABASE_URL` läuft der Server mit PGlite weiter — die App ist
-  schon live, Supabase wird einfach nahtlos drübergelegt.
+Erledigt: Session-Pooler (`aws-0-eu-west-1.pooler.supabase.com:5432`) als
+`DATABASE_URL` in `/opt/TrueLabel/.env` gesetzt (SSL automatisch), App läuft
+gegen Supabase — Schema + 13 Seed-Produkte sind beim ersten Connect angelegt
+worden. Das DB-Passwort liegt **nur** in der Server-`.env` (Rechte 600).
 
 ## 6. Hetzner-Deployment ✅ LIVE: https://truelabel.kamalkit.at
 
