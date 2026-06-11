@@ -51,37 +51,29 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
   - Signing-Secret → `STRIPE_WEBHOOK_SECRET=whsec_…`
 - [ ] *Einstellungen → Billing → Customer Portal* aktivieren (für „Abo verwalten“)
 
-## 5. Supabase als Datenbank
+## 5. Supabase als Datenbank (Projekt ist angelegt)
 
-- [ ] Projekt auf https://supabase.com anlegen (Region **Central EU (Frankfurt)**)
-- [ ] *Project Settings → Database → Connection string → **Transaction pooler**
-      (Port 6543)* kopieren, `[YOUR-PASSWORD]` durch dein DB-Passwort ersetzen
-- [ ] Diesen String auf dem Server als `DATABASE_URL` eintragen
-      (`/opt/TrueLabel/.env`) — siehe Schritt 6. SSL aktiviert die App automatisch.
-- [ ] Danach App neu starten: `ssh root@46.225.191.223 "pm2 restart truelabel"`
-      (Schema + Seed legt die App beim ersten Start selbst an).
-- Hinweis: Ohne `DATABASE_URL` läuft der Server mit eingebettetem PGlite weiter —
-  d. h. die App ist sofort live, Supabase kannst du jederzeit nachziehen.
+Es fehlt nur noch der **Transaction-Pooler-Connection-String** (Port 6543):
+- Supabase-Projekt → oben **Connect** → **Connection string** → **Transaction
+  pooler** → URI kopieren, `[YOUR-PASSWORD]` durch das DB-Passwort ersetzen.
+- Den fertigen String an mich geben → ich trage ihn als `DATABASE_URL` in
+  `/opt/TrueLabel/.env` ein und starte neu (`pm2 restart truelabel`). Schema +
+  Seed legt die App beim ersten Connect selbst an — kein SQL nötig.
+- Kein Passwort mehr zur Hand? Supabase → *Project Settings → Database →
+  Reset database password* → neues kopieren.
+- Hinweis: Ohne `DATABASE_URL` läuft der Server mit PGlite weiter — die App ist
+  schon live, Supabase wird einfach nahtlos drübergelegt.
 
-## 6. Hetzner-Deployment (bereits eingerichtet)
+## 6. Hetzner-Deployment ✅ LIVE: https://truelabel.kamalkit.at
 
-Ich habe die App auf `46.225.191.223` unter **`/opt/TrueLabel`** deployt:
-geklont, gebaut und als PM2-Prozess **`truelabel`** auf **Port 3100** gestartet
-(Port 3000 ist von kamalkit belegt). Auf dem Server liegt eine `.env` mit
-generiertem `AUTH_SECRET`, `ADMIN_EMAIL` und `PORT=3100`.
-
-Damit die App öffentlich + per HTTPS erreichbar ist (die Kamera braucht HTTPS):
-
-- [ ] **DNS-A-Record setzen**: `truelabel.kdoc.at` → `46.225.191.223`
-      (bei deinem DNS-Anbieter für kdoc.at)
-- [ ] Sobald der Record aktiv ist, **TLS-Zertifikat holen**:
-      ```bash
-      ssh root@46.225.191.223 "certbot --nginx -d truelabel.kdoc.at --non-interactive --agree-tos -m DEINE@MAIL.de --redirect"
-      ```
-      (oder sag mir Bescheid — dann mache ich es)
-- [ ] `NEXT_PUBLIC_APP_URL=https://truelabel.kdoc.at` in `/opt/TrueLabel/.env`
-      eintragen und `pm2 restart truelabel`
-- Andere Subdomain gewünscht? Sag den Namen — ist eine Zeile im nginx-vHost.
+Erledigt und öffentlich erreichbar:
+- App unter **`/opt/TrueLabel`**, PM2-Prozess **`truelabel`**, **Port 3100**.
+- `.env` mit generiertem `AUTH_SECRET`, `ADMIN_EMAIL`, `PORT=3100`,
+  `NEXT_PUBLIC_APP_URL=https://truelabel.kamalkit.at`.
+- DNS `truelabel.kamalkit.at` → `46.225.191.223` (✓ gesetzt).
+- nginx-vHost + **Let's-Encrypt-TLS** (Auto-Renewal aktiv), HTTP→HTTPS-Redirect.
+- DB aktuell PGlite (Fallback) — wird durch Supabase ersetzt, sobald
+  `DATABASE_URL` gesetzt ist (Schritt 5).
 
 ## 7. CI/CD: Auto-Deploy bei Push auf `main`
 
@@ -107,8 +99,8 @@ In `/opt/TrueLabel/.env` ergänzen und `pm2 restart truelabel`:
 
 - [ ] **Mistral** (Schritt 2): `MISTRAL_API_KEY=…`
 - [ ] **Google-Login** (Schritt 3): `GOOGLE_CLIENT_ID/SECRET` + Redirect-URI
-      `https://truelabel.kdoc.at/api/auth/google/callback`
-- [ ] **Stripe** (Schritt 4): Keys + Webhook-URL `https://truelabel.kdoc.at/api/premium/webhook`
+      `https://truelabel.kamalkit.at/api/auth/google/callback`
+- [ ] **Stripe** (Schritt 4): Keys + Webhook-URL `https://truelabel.kamalkit.at/api/premium/webhook`
 
 ## 9. Rechtstexte finalisieren (vor Veröffentlichung Pflicht)
 
