@@ -45,6 +45,14 @@ export async function POST(req: Request) {
     success_url: `${appUrl()}/premium/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${appUrl()}/premium`,
     locale: "de",
+    allow_promotion_codes: true,
+    subscription_data: { description: "TrueLabel Premium" },
+    custom_text: {
+      submit: {
+        message:
+          "Jederzeit kündbar. Keine versteckten Kosten. Danke, dass du TrueLabel möglich machst.",
+      },
+    },
   });
 
   return NextResponse.json({ url: session.url });
