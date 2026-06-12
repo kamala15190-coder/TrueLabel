@@ -10,7 +10,7 @@
 //
 // Env-Schalter:
 //   LIMIT=200000        max. einzufügende Produkte
-//   MAX_DB_MB=430       Stopp, sobald die DB so groß ist (Free-Tier=500)
+//   MAX_DB_MB=430       Stopp, sobald die DB so groß ist (Disk!=DB beachten)
 //   COUNTRIES=en:germany,en:austria,en:switzerland   ("" = weltweit)
 //   BATCH=400           Insert-Batchgröße
 //   REQUIRE_NUTRIMENTS=1  nur Produkte mit Nährwerten
@@ -41,13 +41,22 @@ const pool = new pg.Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+// Postgres erlaubt keine Null-Bytes in text/jsonb — OFF-Daten haben vereinzelt
+// welche. Vorher rausputzen, sonst stirbt der ganze Batch.
+const NUL = String.fromCharCode(0);
+const clean = (s: string) => (s.indexOf(NUL) >= 0 ? s.split(NUL).join("") : s);
+const cleanJson = (o: unknown) => {
+  const j = JSON.stringify(o);
+  return j.indexOf("\\u0000") >= 0 ? j.split("\\u0000").join("") : j;
+};
+
 const COLS = 9;
 async function flush(rows: { barcode: string; name: string; brand: string; category: string; data: unknown; scores: unknown }[]): Promise<number> {
   if (rows.length === 0) return 0;
   const values: unknown[] = [];
   const tuples = rows.map((r, i) => {
     const o = i * COLS;
-    values.push(r.barcode, r.name, r.brand, r.category, JSON.stringify(r.data), JSON.stringify(r.scores), SCORE_VERSION, "off", false);
+    values.push(clean(r.barcode), clean(r.name), clean(r.brand), clean(r.category), cleanJson(r.data), cleanJson(r.scores), SCORE_VERSION, "off", false);
     return `($${o + 1},$${o + 2},$${o + 3},$${o + 4},$${o + 5},$${o + 6},$${o + 7},$${o + 8},$${o + 9})`;
   }).join(",");
   const sql = `INSERT INTO products (barcode,name,brand,category,data,scores,score_version,source,verified)
