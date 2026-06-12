@@ -425,6 +425,26 @@ textarea.input { height: auto; padding: 15px 18px; line-height: 1.55; resize: no
 @keyframes sheetUp { from { transform: translate(-50%, 44px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+/* Install-Sheet */
+.install-sheet { padding-top: 16px; }
+.install-x { position: absolute; top: 16px; right: 18px; width: 34px; height: 34px; border: none; border-radius: var(--pill); background: var(--surface-strong); color: var(--ink-2); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: inset 0 0 0 1px var(--hair), var(--sh-soft); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: 0.2s var(--ease); }
+.install-x:hover { color: var(--ink); }
+.install-x svg { stroke: currentColor; }
+.install-head { display: flex; align-items: center; gap: 15px; padding-right: 40px; margin-bottom: 18px; }
+.install-icon { border-radius: 16px; flex-shrink: 0; box-shadow: var(--sh-leaf), inset 0 0 0 1px rgba(255,255,255,.5); }
+.install-sub { font-size: 13px; line-height: 1.5; margin-top: 3px; }
+.install-perks { list-style: none; display: flex; flex-direction: column; gap: 11px; margin: 0 0 20px; padding: 16px 16px 17px; background: var(--surface); border-radius: var(--r-lg); box-shadow: inset 0 0 0 1px var(--hair), var(--sh-soft); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.install-perks li { display: flex; align-items: center; gap: 12px; font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.ip-ico { flex-shrink: 0; width: 34px; height: 34px; border-radius: 11px; background: var(--leaf-wash); color: var(--leaf-deep); display: flex; align-items: center; justify-content: center; }
+.ip-ico svg { stroke: currentColor; }
+.install-cta { margin-bottom: 9px; }
+.install-later { height: 50px; font-size: 15px; font-weight: 600; color: var(--ink-2); box-shadow: none; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.install-later:hover { color: var(--ink); }
+.install-ios { font-size: 14px; line-height: 1.6; color: var(--ink); text-align: center; padding: 15px 16px; margin-bottom: 9px; background: var(--leaf-veil); border-radius: var(--r-md); box-shadow: inset 0 0 0 1px var(--hair); }
+.install-ios b { font-weight: 700; }
+.ip-share { display: inline-flex; vertical-align: -3px; width: 24px; height: 24px; border-radius: 7px; background: var(--surface-solid); color: var(--leaf); align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px var(--hair-2); }
+.ip-share svg { stroke: currentColor; }
+
 /* Onboarding */
 .onb-veil { position: fixed; inset: 0; z-index: 80; background: linear-gradient(180deg, var(--canvas-1), var(--canvas-3)); display: flex; justify-content: center; }
 .onb { width: 100%; max-width: 440px; display: flex; flex-direction: column; padding: 52px 26px calc(34px + env(safe-area-inset-bottom)); position: relative; overflow: hidden; }

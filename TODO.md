@@ -6,7 +6,7 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
 
 ---
 
-## 1. Lokale Umgebung (2 Minuten)
+## 1. Lokale Umgebung (2 Minuten)✅
 
 `.env.local` existiert bereits (beim Test erzeugt). Zwei Werte anpassen:
 
@@ -16,7 +16,7 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
 - [ ] **OFF_CONTACT** setzen: deine echte Kontakt-E-Mail. OpenFoodFacts verlangt
       sie im User-Agent ihrer API-Richtlinie.
 
-## 2. Mistral AI (KI-Features: Foto-Extraktion, Korrektur-Triage)
+## 2. Mistral AI (KI-Features: Foto-Extraktion, Korrektur-Triage)✅
 
 - [ ] Konto auf https://console.mistral.ai anlegen
 - [ ] API-Key erstellen: *API Keys → Create new key*
@@ -36,7 +36,7 @@ Hier steht **ausschließlich**, was Accounts, Keys oder manuelle Schritte brauch
 - [ ] OAuth-Consent-Screen ausfüllen (App-Name „TrueLabel“, deine E-Mail)
 - [ ] In `.env.local`: `GOOGLE_CLIENT_ID=…` und `GOOGLE_CLIENT_SECRET=…`
 
-## 4. Stripe (Premium-Abo)
+## 4. Stripe (Premium-Abo)✅
 
 - [ ] Konto auf https://dashboard.stripe.com (erst Test-Modus reicht)
 - [ ] *Produktkatalog → Produkt hinzufügen*: Name **TrueLabel Premium**, zwei Preise:
@@ -69,7 +69,7 @@ Erledigt und öffentlich erreichbar:
 - DB aktuell PGlite (Fallback) — wird durch Supabase ersetzt, sobald
   `DATABASE_URL` gesetzt ist (Schritt 5).
 
-## 7. CI/CD: Auto-Deploy bei Push auf `main`
+## 7. CI/CD: Auto-Deploy bei Push auf `main`✅
 
 Die Pipeline (`.github/workflows/deploy.yml`) ist im Repo. Sie verbindet sich
 per SSH mit dem Hetzner-Server und führt `git pull → npm ci → build →
@@ -107,7 +107,7 @@ Alle Platzhalter sind gold markiert als `[SO]`:
       sind äußerungsrechtlich sensibel — die Texte sind defensiv formuliert,
       aber eine Stunde Anwalt ist gut investiert)
 
-## 10. Git (erledigt)
+## 10. Git (erledigt)✅
 
 Das Projekt ist committet und auf `git@github.com:kamala15190-coder/TrueLabel`
 (Branch `main`) gepusht. Künftige Änderungen einfach committen und pushen —

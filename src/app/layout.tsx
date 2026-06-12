@@ -3,6 +3,7 @@ import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { BottomNav } from "@/components/BottomNav";
 import { PwaRegister } from "@/components/PwaRegister";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 // Display: weiche, organische Optical-Serif — gibt der App Charakter & Wärme.
 const display = Fraunces({
@@ -23,7 +24,7 @@ const sans = Hanken_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: "TrueLabel — Weißt du wirklich, was du isst?",
+    default: "TrueLabel: Weißt du wirklich, was du isst?",
     template: "%s · TrueLabel",
   },
   description:
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="app">{children}</div>
         <BottomNav />
         <PwaRegister />
+        <InstallPrompt />
       </body>
     </html>
   );
