@@ -23,7 +23,7 @@ const KNOWN: Entry[] = [
       category: "Getreide",
       text: "Vollkorngetreide mit besonders hohem Anteil an löslichen Ballaststoffen (Beta-Glucan). Eine der nährstoffreichsten heimischen Getreidesorten.",
       positives: ["Senkt nachweislich den LDL-Cholesterinspiegel", "Lang anhaltende Sättigung, niedriger glykämischer Index"],
-      negatives: ["Enthält von Natur aus Gluten (Avenin) — relevant bei Zöliakie"],
+      negatives: ["Enthält von Natur aus Gluten (Avenin), relevant bei Zöliakie"],
       allergen: "Gluten",
     },
   },
@@ -43,7 +43,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Zucker",
       category: "Süßungsmittel",
-      text: "Haushaltszucker (Saccharose). Die WHO empfiehlt, freie Zucker auf unter 10 % der Energiezufuhr zu begrenzen — besser unter 5 %.",
+      text: "Haushaltszucker (Saccharose). Die WHO empfiehlt, freie Zucker auf unter 10 % der Energiezufuhr zu begrenzen, besser noch unter 5 %.",
       positives: [],
       negatives: ["Fördert Karies", "Hoher Konsum begünstigt Übergewicht und Stoffwechselerkrankungen"],
     },
@@ -53,7 +53,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Rohrzucker",
       category: "Süßungsmittel",
-      text: "Zucker aus Zuckerrohr. Ernährungsphysiologisch praktisch identisch mit Rübenzucker — sozial relevant ist die Lieferkette (Anbauländer).",
+      text: "Zucker aus Zuckerrohr. Ernährungsphysiologisch praktisch identisch mit Rübenzucker. Sozial relevant ist die Lieferkette (Anbauländer).",
       positives: [],
       negatives: ["Gleiche gesundheitliche Wirkung wie Haushaltszucker", "Anbau teils in Ländern mit schwachen Arbeitsrechten"],
     },
@@ -83,9 +83,9 @@ const KNOWN: Entry[] = [
     info: {
       title: "Kakao",
       category: "Rohstoff",
-      text: "Basis von Schokolade, überwiegend aus Westafrika. Reich an Flavanolen — sozial aber ein Hochrisiko-Rohstoff.",
+      text: "Basis von Schokolade, überwiegend aus Westafrika. Reich an Flavanolen, sozial aber ein Hochrisiko-Rohstoff.",
       positives: ["Flavanole können die Gefäßfunktion unterstützen (v. a. dunkle Schokolade)"],
-      negatives: ["Dokumentiertes Risiko von Kinderarbeit in der Lieferkette — auf Fairtrade-Siegel achten"],
+      negatives: ["Dokumentiertes Risiko von Kinderarbeit in der Lieferkette, auf Fairtrade-Siegel achten"],
     },
   },
   {
@@ -103,7 +103,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Milchbestandteile",
       category: "Tierisches Produkt",
-      text: "Milch, Milchpulver oder Molkenerzeugnisse — liefern Protein und Calcium, enthalten Laktose.",
+      text: "Milch, Milchpulver oder Molkenerzeugnisse liefern Protein und Calcium, enthalten aber Laktose.",
       positives: ["Calcium- und Proteinquelle"],
       negatives: ["Nicht vegan", "Enthält Laktose"],
       allergen: "Milch",
@@ -146,7 +146,7 @@ const KNOWN: Entry[] = [
       category: "Hülsenfrucht",
       text: "Botanisch eine Hülsenfrucht. Nährstoffdicht, aber eines der stärksten Allergene.",
       positives: ["Viel Protein und ungesättigte Fette", "Magnesium- und Niacinquelle"],
-      negatives: ["Starkes Allergen — schon Spuren können reagieren"],
+      negatives: ["Starkes Allergen, schon Spuren können reagieren"],
       allergen: "Erdnüsse",
     },
   },
@@ -155,7 +155,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Haselnüsse",
       category: "Schalenfrucht",
-      text: "Nährstoffreiche Nuss, Großteil der Weltproduktion stammt aus der Türkei — dort sind Erntebedingungen sozial umstritten.",
+      text: "Nährstoffreiche Nuss. Der Großteil der Weltproduktion stammt aus der Türkei, wo die Erntebedingungen sozial umstritten sind.",
       positives: ["Vitamin E, ungesättigte Fettsäuren"],
       negatives: ["Allergen", "Lieferkette teils mit Saisonarbeits-Risiken"],
       allergen: "Schalenfrüchte",
@@ -166,7 +166,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Vanille",
       category: "Gewürz",
-      text: "Eines der teuersten Gewürze der Welt, überwiegend aus Madagaskar — kleinbäuerliche Strukturen, volatile Preise.",
+      text: "Eines der teuersten Gewürze der Welt, überwiegend aus Madagaskar mit kleinbäuerlichen Strukturen und volatilen Preisen.",
       positives: ["Natürliches Aroma statt synthetischem Vanillin"],
       negatives: ["Soziale Risiken in der Lieferkette ohne Fair-Zertifizierung"],
     },
@@ -176,7 +176,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Koffein",
       category: "Stimulans",
-      text: "Anregender Wirkstoff. EFSA: bis 400 mg/Tag für gesunde Erwachsene unbedenklich — Kinder sollten koffeinhaltige Getränke meiden.",
+      text: "Anregender Wirkstoff. EFSA: bis 400 mg/Tag für gesunde Erwachsene unbedenklich. Kinder sollten koffeinhaltige Getränke meiden.",
       positives: ["Kurzfristig erhöhte Aufmerksamkeit"],
       negatives: ["Für Kinder und Schwangere ungeeignet", "Kann Schlaf beeinträchtigen"],
     },
@@ -186,7 +186,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Aromen",
       category: "Zusatz",
-      text: "Sammelbegriff — „natürliches Aroma“ muss aus natürlichen Quellen stammen, sagt aber nichts über das Lebensmittel selbst aus.",
+      text: "Sammelbegriff: „natürliches Aroma“ muss aus natürlichen Quellen stammen, sagt aber nichts über das Lebensmittel selbst aus.",
       positives: [],
       negatives: ["Häufig Marker für stärkere Verarbeitung"],
     },
@@ -216,7 +216,7 @@ const KNOWN: Entry[] = [
     info: {
       title: "Kartoffeln",
       category: "Gemüse",
-      text: "Heimisches Grundnahrungsmittel — die Verarbeitung (z. B. Frittieren) bestimmt den Gesundheitswert.",
+      text: "Heimisches Grundnahrungsmittel. Die Verarbeitung (z. B. Frittieren) bestimmt den Gesundheitswert.",
       positives: ["Kalium, Vitamin C, regional verfügbar"],
       negatives: ["Frittiert: hohe Fett- und Acrylamidwerte"],
     },

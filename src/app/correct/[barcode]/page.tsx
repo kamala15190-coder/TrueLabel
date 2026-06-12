@@ -33,7 +33,7 @@ export default async function CorrectPage({
           <span className="ico">✎</span>
           <h1 className="h-l">Kurz anmelden, dann korrigieren</h1>
           <p className="body-l t2" style={{ maxWidth: 300 }}>
-            Korrekturen brauchen ein kostenloses Konto — so bleibt die Datenbank
+            Korrekturen brauchen ein kostenloses Konto. So bleibt die Datenbank
             vertrauenswürdig und du bekommst Punkte für übernommene Korrekturen.
           </p>
           <Link href="/login" style={{ width: "100%" }}>
@@ -49,7 +49,7 @@ export default async function CorrectPage({
       <BackBar title="Korrektur vorschlagen" />
       <CorrectionForm
         barcode={product.barcode}
-        productName={`${product.name}${product.brand ? ` — ${product.brand}` : ""}`}
+        productName={`${product.name}${product.brand ? ` · ${product.brand}` : ""}`}
       />
     </main>
   );

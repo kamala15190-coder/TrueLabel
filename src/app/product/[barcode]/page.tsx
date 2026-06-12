@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getOrFetchProduct(barcode).catch(() => null);
   if (!product) return { title: "Produkt nicht gefunden" };
   return {
-    title: `${product.name} — Score ${product.scores.total}/100`,
+    title: `${product.name} · Score ${product.scores.total}/100`,
     description: `Gesundheit ${product.scores.health.score} · Umwelt ${product.scores.eco.score} · Soziales ${product.scores.social.score}. Jetzt selbst scannen mit TrueLabel.`,
   };
 }

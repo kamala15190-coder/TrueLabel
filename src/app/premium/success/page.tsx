@@ -11,7 +11,7 @@ export default function PremiumSuccessPage() {
         <h1 className="h-l">Willkommen bei Premium!</h1>
         <p className="body-l t2" style={{ maxWidth: 300 }}>
           Deine Zahlung wird verarbeitet. Alle Premium-Funktionen sind in wenigen
-          Sekunden freigeschaltet — Alternativen, Vergleich, Listen und Quellen.
+          Sekunden freigeschaltet: Alternativen, Vergleich, Listen und Quellen.
         </p>
         <Link href="/" style={{ width: "100%" }}>
           <span className="btn btn-primary">Weiter scannen</span>

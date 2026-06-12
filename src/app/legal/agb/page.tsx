@@ -23,15 +23,15 @@ export default function AgbPage() {
         TrueLabel zeigt zu Lebensmitteln algorithmisch berechnete Bewertungen in
         den Dimensionen Gesundheit, Umwelt und Soziales („Scores“), basierend auf
         öffentlich verfügbaren Daten (u. a. OpenFoodFacts), eigenen Datensätzen
-        und Community-Beiträgen. Die Kernfunktionen — unbegrenztes Scannen,
-        Suche, Verlauf, Community-Beiträge — sind dauerhaft kostenlos und
+        und Community-Beiträgen. Die Kernfunktionen (unbegrenztes Scannen,
+        Suche, Verlauf, Community-Beiträge) sind dauerhaft kostenlos und
         werbefrei.
       </p>
 
       <h2>3. Scores sind Einschätzungen</h2>
       <p>
         <strong>Die Scores sind automatisiert berechnete Einschätzungen auf Basis der
-        dokumentierten Methodik — keine medizinische, ernährungswissenschaftliche
+        dokumentierten Methodik. Sie sind keine medizinische, ernährungswissenschaftliche
         oder behördliche Beratung und keine Tatsachenbehauptung über einzelne
         Hersteller.</strong> Produktdaten können unvollständig, veraltet oder fehlerhaft
         sein. Verlasse dich bei Allergien und Unverträglichkeiten ausschließlich

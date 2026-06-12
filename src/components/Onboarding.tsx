@@ -136,7 +136,7 @@ export function Onboarding() {
           ) : (
             <>
               <button className="btn btn-primary mb12" onClick={finish}>
-                Los geht&apos;s — einfach scannen
+                Los geht&apos;s, einfach scannen
               </button>
               <Link href="/register" onClick={finish}>
                 <span className="btn btn-ghost">Konto erstellen</span>

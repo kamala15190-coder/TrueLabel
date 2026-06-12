@@ -27,12 +27,6 @@ const SCAN_FORMATS: BarcodeFormatName[] = [
   "ean_13", "ean_8", "upc_a", "upc_e", "code_128", "code_39",
 ];
 
-const DEMO = [
-  { barcode: "4012345678901", label: "🥣 Bio Haferflocken" },
-  { barcode: "4012345678932", label: "🍫 Vollmilch-Schokolade" },
-  { barcode: "4012345678956", label: "🥤 Cola Classic" },
-];
-
 export function Scanner() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -299,9 +293,9 @@ export function Scanner() {
             <p style={{ fontSize: 32, marginBottom: 10 }}>📷</p>
             <p className="body-m t2" style={{ maxWidth: 280 }}>
               {mode === "denied" &&
-                "Kein Kamerazugriff. Erlaube die Kamera in den Browser-Einstellungen und versuche es erneut – oder gib den Barcode unten manuell ein."}
+                "Kein Kamerazugriff. Erlaube die Kamera in den Browser-Einstellungen und versuche es erneut. Alternativ kannst du den Barcode unten manuell eingeben."}
               {mode === "insecure" &&
-                "Die Kamera funktioniert nur über eine sichere Verbindung (https). Öffne die App über https:// – oder gib den Barcode unten manuell ein."}
+                "Die Kamera funktioniert nur über eine sichere Verbindung (https). Öffne die App über https:// oder gib den Barcode unten manuell ein."}
               {mode === "nocam" &&
                 "Keine passende Kamera gefunden. Gib den Barcode unten einfach manuell ein."}
             </p>
@@ -339,15 +333,6 @@ export function Scanner() {
           →
         </button>
       </form>
-
-      <div className="row gap8 mt16" style={{ flexWrap: "wrap" }}>
-        <span className="micro" style={{ width: "100%" }}>Zum Ausprobieren:</span>
-        {DEMO.map((d) => (
-          <button key={d.barcode} className="chip" onClick={() => goTo(d.barcode)}>
-            {d.label}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

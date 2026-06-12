@@ -72,7 +72,7 @@ export function computeSocial(p: ProductData): DimensionScore {
       points: penalty,
       status: penalty <= -12 ? "bad" : "medium",
       pct: clamp(70 + penalty * 3),
-      note: "Rohstoffe mit dokumentiertem Risiko für Ausbeutung in der Lieferkette — ohne unabhängige Zertifizierung.",
+      note: "Rohstoffe mit dokumentiertem Risiko für Ausbeutung in der Lieferkette, ohne unabhängige Zertifizierung.",
     });
   }
 
@@ -90,7 +90,7 @@ export function computeSocial(p: ProductData): DimensionScore {
     pct: clamp(60 + tierPts * 3),
     note:
       tier === 0
-        ? "Keine Herkunftsangabe — Transparenz eingeschränkt."
+        ? "Keine Herkunftsangabe. Transparenz eingeschränkt."
         : tier >= 3
           ? "Erhöhtes Risiko bei Arbeitsrechten (ITUC-Einstufung der Region)."
           : "Starke Arbeitsrechte und Kontrollen.",

@@ -56,7 +56,7 @@ export function ListClient() {
         <span className="ico">🛒</span>
         <h2 className="h-m">Liste ist leer</h2>
         <p className="body-m t2">
-          Öffne ein Produkt und tippe auf „Zur Liste“ — schon steht es hier.
+          Öffne ein Produkt und tippe auf „Zur Liste“. Schon steht es hier.
         </p>
         <Link href="/" style={{ width: "100%" }}>
           <span className="btn btn-primary btn-sm">Produkt scannen</span>

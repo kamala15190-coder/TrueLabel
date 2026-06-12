@@ -46,18 +46,12 @@ export default async function HomePage() {
           <em style={{ color: "var(--leaf)" }}>wirklich</em> drin?
         </h1>
         <p className="body-l t2 mt12" style={{ maxWidth: 320 }}>
-          Ein Scan genügt — und du siehst in Sekunden, wie gesund, nachhaltig und
+          Ein Scan genügt. In Sekunden siehst du, wie gesund, nachhaltig und
           fair dein Essen wirklich ist.
         </p>
       </div>
 
       <Scanner />
-
-      <div className="center mt24">
-        <Link href="/search" className="link">
-          Produkt ohne Barcode suchen →
-        </Link>
-      </div>
 
       <p className="micro center mt24">
         Unbegrenzte Scans · Kostenlos · Keine Werbung

@@ -199,12 +199,12 @@ export function ProductView({
           <p className="micro mb12">Alternativen werden geladen …</p>
         ) : alternatives.length === 0 ? (
           <p className="body-m t2 mb12">
-            Stark — in dieser Kategorie kennen wir aktuell nichts Besseres, das zu deinem Profil passt.
+            Stark! In dieser Kategorie kennen wir aktuell nichts Besseres, das zu deinem Profil passt.
           </p>
         ) : (
           <>
             {altMode === "conflict-free" && (
-              <p className="micro mb12">Dieses Produkt passt nicht zu deinem Profil — diese hier schon:</p>
+              <p className="micro mb12">Dieses Produkt passt nicht zu deinem Profil. Diese hier schon:</p>
             )}
             {alternatives.map((alt) => (
               <button
@@ -389,14 +389,14 @@ function ScoreDetail({
       {premium ? (
         SOURCES[dimension].map((s) => (
           <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className="src">
-            📄 <span className="grow">{s.title} — <span className="doc">{s.org}</span></span> ›
+            📄 <span className="grow">{s.title} · <span className="doc">{s.org}</span></span> ›
           </a>
         ))
       ) : (
         <div className="locked">
           {SOURCES[dimension].slice(0, 2).map((s) => (
             <div key={s.url} className="src">
-              📄 <span className="grow">{s.title} — <span className="doc">{s.org}</span></span> ›
+              📄 <span className="grow">{s.title} · <span className="doc">{s.org}</span></span> ›
             </div>
           ))}
           <Link href="/premium" className="lock-veil">

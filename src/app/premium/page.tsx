@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Premium" };
 export const dynamic = "force-dynamic";
 
 const FEATURES = [
-  "Intelligente Alternativen — bessere Produkte, abgestimmt auf dein Profil",
+  "Intelligente Alternativen: bessere Produkte, abgestimmt auf dein Profil",
   "Detaillierter Score-Breakdown mit wissenschaftlichen Quellen",
   "Produktvergleich (2 Produkte nebeneinander)",
   "Einkaufsliste erstellen & als CSV exportieren",

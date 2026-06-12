@@ -24,13 +24,13 @@ export default function ImpressumPage() {
       <p>
         E-Mail: <span className="ph">[KONTAKT-E-MAIL]</span>
         <br />
-        Telefon: <span className="ph">[TELEFONNUMMER — optional, aber empfohlen]</span>
+        Telefon: <span className="ph">[TELEFONNUMMER, optional, aber empfohlen]</span>
       </p>
 
       <h2>Umsatzsteuer</h2>
       <p>
         Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:{" "}
-        <span className="ph">[UST-IDNR. — falls vorhanden, sonst Absatz entfernen]</span>
+        <span className="ph">[UST-IDNR., falls vorhanden, sonst Absatz entfernen]</span>
       </p>
 
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>

@@ -24,7 +24,7 @@ export default function DatenschutzPage() {
         TrueLabel ist bewusst datensparsam gebaut: <strong>Scannen funktioniert ohne
         Konto.</strong> In diesem Fall wird dein Scan-Verlauf ausschließlich lokal auf
         deinem Gerät gespeichert (localStorage) und nicht an uns übertragen. Wir
-        zeigen keine Werbung und verkaufen keine Daten — Werbe- oder
+        zeigen keine Werbung und verkaufen keine Daten. Werbe- oder
         Tracking-Dienste Dritter sind nicht eingebunden.
       </p>
 
@@ -48,7 +48,7 @@ export default function DatenschutzPage() {
         Ernährungsprofile (z. B. „vegan“, „glutenfrei“), Community-Beiträge,
         Korrekturen und Punktestand. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO
         (Vertragserfüllung). Die Session wird über ein technisch notwendiges
-        Cookie („tl_session“, 30 Tage, httpOnly) gehalten — Rechtsgrundlage:
+        Cookie („tl_session“, 30 Tage, httpOnly) gehalten. Rechtsgrundlage:
         § 25 Abs. 2 Nr. 2 TDDDG.
       </p>
       <p>
@@ -57,7 +57,7 @@ export default function DatenschutzPage() {
         (Art. 9 DSGVO). Du gibst sie freiwillig an; mit dem Aktivieren willigst du
         in die Verarbeitung zum Zweck der personalisierten Produktbewertung ein
         (Art. 9 Abs. 2 lit. a DSGVO). Du kannst sie jederzeit im Profil
-        deaktivieren — sie werden dann nicht mehr verwendet.
+        deaktivieren. Sie werden dann nicht mehr verwendet.
       </p>
 
       <h2>5. Login mit Google (optional)</h2>
@@ -65,7 +65,7 @@ export default function DatenschutzPage() {
         Wenn du dich mit Google anmeldest, erhalten wir von Google deine
         E-Mail-Adresse, deinen Namen und eine Konto-ID. Anbieter: Google Ireland
         Limited, Gordon House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage:
-        Art. 6 Abs. 1 lit. b DSGVO. Die Nutzung ist freiwillig — Registrierung per
+        Art. 6 Abs. 1 lit. b DSGVO. Die Nutzung ist freiwillig. Eine Registrierung per
         E-Mail ist gleichwertig möglich.
       </p>
 
@@ -83,7 +83,7 @@ export default function DatenschutzPage() {
         Wenn du ein Produkt per Foto beiträgst, werden die Fotos zur automatischen
         Texterkennung an Mistral AI SAS, 15 rue des Halles, 75001 Paris, Frankreich
         (EU) übertragen und dort verarbeitet. Wir speichern die Fotos nicht
-        dauerhaft — nur die extrahierten Produktdaten (Zutaten, Nährwerte).
+        dauerhaft, sondern nur die extrahierten Produktdaten (Zutaten, Nährwerte).
         Fotografiere keine Personen oder persönlichen Gegenstände mit.
         Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. Auch Korrekturtexte werden zur
         automatischen Prüfung an Mistral übermittelt.
@@ -92,7 +92,7 @@ export default function DatenschutzPage() {
       <h2>8. Produktdaten (OpenFoodFacts)</h2>
       <p>
         Für unbekannte Barcodes fragt unser Server die offene Datenbank
-        OpenFoodFacts ab. Dabei wird der Barcode übermittelt — niemals deine
+        OpenFoodFacts ab. Dabei wird der Barcode übermittelt, niemals deine
         IP-Adresse oder Kontodaten, da die Anfrage von unserem Server ausgeht.
       </p>
 
@@ -108,7 +108,7 @@ export default function DatenschutzPage() {
       <p>
         Wir verwenden ausschließlich technisch notwendige Cookies (Session,
         OAuth-Sicherheits-State). Es gibt kein Tracking, keine Analyse-Cookies,
-        keine Werbe-Cookies — deshalb auch kein Cookie-Banner.
+        keine Werbe-Cookies. Deshalb gibt es auch kein Cookie-Banner.
       </p>
 
       <h2>11. Speicherdauer</h2>

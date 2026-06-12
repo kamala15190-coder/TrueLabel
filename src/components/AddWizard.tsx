@@ -111,9 +111,9 @@ export function AddWizard({ initialBarcode }: { initialBarcode: string }) {
           fiber: extracted.nutriments?.fiber?.toString() ?? f.fiber,
         }));
         if (extracted.allergens?.length) setAllergens(extracted.allergens);
-        setAiNote("✓ Unsere KI hat die Daten aus deinen Fotos gelesen — bitte kurz prüfen.");
+        setAiNote("✓ Unsere KI hat die Daten aus deinen Fotos gelesen. Bitte kurz prüfen.");
       } else {
-        setAiNote("Die KI-Analyse ist gerade nicht verfügbar — bitte trage die Daten kurz manuell ein.");
+        setAiNote("Die KI-Analyse ist gerade nicht verfügbar. Bitte trage die Daten kurz manuell ein.");
       }
       setStep(2);
     } finally {
@@ -204,7 +204,7 @@ export function AddWizard({ initialBarcode }: { initialBarcode: string }) {
         </div>
         <h1 className="h-l mb8">Produktbilder</h1>
         <p className="body-m t2 mb20">
-          Mach Fotos — unsere KI liest Name, Zutaten und Nährwerte automatisch aus.
+          Mach Fotos. Unsere KI liest Name, Zutaten und Nährwerte automatisch aus.
           Du kannst die Daten auch ohne Fotos eintragen.
         </p>
 

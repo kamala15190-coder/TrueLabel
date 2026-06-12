@@ -60,7 +60,7 @@ export function computeHealth(p: ProductData): DimensionScore {
     pct: base,
     note: grade
       ? "Berechnet aus Energie, Zucker, Fett, Salz, Ballaststoffen und Protein je 100 g."
-      : "Es liegen nicht genug Nährwertdaten vor — Basiswert 50.",
+      : "Es liegen nicht genug Nährwertdaten vor. Basiswert 50.",
   });
 
   // --- Transparenz-Faktoren (im Nutri-Score enthalten, hier erklärt) ---
@@ -86,7 +86,7 @@ export function computeHealth(p: ProductData): DimensionScore {
       const key = code.toUpperCase();
       const risk = ADDITIVE_RISK[key] ?? 2; // unbekannt → vorsichtig als umstritten werten
       additivePenalty -= risk === 3 ? 8 : risk === 2 ? 4 : 1;
-      if (risk >= 2) risky.push(ADDITIVE_NAMES[key] ? `${key} – ${ADDITIVE_NAMES[key]}` : key);
+      if (risk >= 2) risky.push(ADDITIVE_NAMES[key] ? `${key} · ${ADDITIVE_NAMES[key]}` : key);
     }
     additivePenalty = Math.max(additivePenalty, -30);
     factors.push({

@@ -101,7 +101,7 @@ export function SearchClient() {
             <div className="empty">
               <span className="ico">🔍</span>
               <p className="body-m t2">
-                Nichts gefunden. Scanne den Barcode — oder füge das Produkt selbst hinzu.
+                Nichts gefunden. Scanne den Barcode oder füge das Produkt selbst hinzu.
               </p>
             </div>
           )}

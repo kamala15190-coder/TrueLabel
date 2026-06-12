@@ -98,7 +98,7 @@ export function HistoryClient({
         <div className="empty">
           <span className="ico">🕐</span>
           <h2 className="h-m">Noch keine gescannten Produkte</h2>
-          <p className="body-m t2">Scanne deinen ersten Barcode — dauert zwei Sekunden.</p>
+          <p className="body-m t2">Scanne deinen ersten Barcode. Das dauert nur zwei Sekunden.</p>
           <Link href="/" style={{ width: "100%" }}>
             <span className="btn btn-primary btn-sm">Jetzt scannen</span>
           </Link>

@@ -32,11 +32,11 @@ export function checkPersonal(p: ProductData, prefs: DietPrefs): PersonalEntry[]
   }
   if (prefs.glutenfrei) {
     if (al.includes("gluten")) {
-      out.push({ pref: "glutenfrei", level: "conflict", label: "Enthält Gluten", detail: "Als Allergen deklariert — du hast Glutenfrei aktiviert." });
+      out.push({ pref: "glutenfrei", level: "conflict", label: "Enthält Gluten", detail: "Als Allergen deklariert. Du hast Glutenfrei aktiviert." });
     } else if (p.labels.includes("gluten-free")) {
       out.push({ pref: "glutenfrei", level: "match", label: "Glutenfrei zertifiziert", detail: "Mit Glutenfrei-Siegel." });
     } else {
-      out.push({ pref: "glutenfrei", level: "note", label: "Kein Gluten deklariert", detail: "Ohne Siegel — Spuren nicht ausgeschlossen." });
+      out.push({ pref: "glutenfrei", level: "note", label: "Kein Gluten deklariert", detail: "Ohne Siegel sind Spuren nicht ausgeschlossen." });
     }
   }
   if (prefs.laktosefrei) {

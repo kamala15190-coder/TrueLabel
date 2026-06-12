@@ -73,7 +73,7 @@ export function CorrectionForm({
         <h1 className="h-l">{meta.title}</h1>
         <div className={`banner ${meta.cls}`} style={{ textAlign: "left" }}>
           {result.status === "accepted" && "Unsere KI hat deine Korrektur geprüft und direkt übernommen. "}
-          {result.status === "manual" && "Unsere KI hat deine Korrektur vorgeprüft — ein Mensch schaut sie sich nun an. Du erhältst Punkte, sobald sie übernommen wurde. "}
+          {result.status === "manual" && "Unsere KI hat deine Korrektur vorgeprüft. Ein Mensch schaut sie sich nun an. Du erhältst Punkte, sobald sie übernommen wurde. "}
           {result.reason}
         </div>
         {result.points ? (
@@ -113,7 +113,7 @@ export function CorrectionForm({
           maxLength={500}
           required
           minLength={10}
-          placeholder="Beschreibe präzise, was nicht stimmt — z. B. „Der Zuckergehalt ist 14 g, nicht 22 g (steht auf der Packung)“"
+          placeholder="Beschreibe präzise, was nicht stimmt, z. B. „Der Zuckergehalt ist 14 g, nicht 22 g (steht auf der Packung)“"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
@@ -126,7 +126,7 @@ export function CorrectionForm({
         {busy ? "KI prüft deine Korrektur …" : "Einreichen"}
       </button>
       <p className="micro center mt12">
-        Eindeutige Korrekturen übernimmt unsere KI sofort — alles andere prüft ein Mensch.
+        Eindeutige Korrekturen übernimmt unsere KI sofort. Alles andere prüft ein Mensch.
       </p>
     </form>
   );

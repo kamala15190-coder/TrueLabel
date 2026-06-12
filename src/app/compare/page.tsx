@@ -23,7 +23,7 @@ export default async function ComparePage({
           <span className="ico" style={{ opacity: 1 }}>⚖️</span>
           <h1 className="h-l">Produkte nebeneinander</h1>
           <p className="body-l t2" style={{ maxWidth: 300 }}>
-            Zwei Produkte, alle Scores, ein klarer Gewinner — der Produktvergleich
+            Zwei Produkte, alle Scores, ein klarer Gewinner. Der Produktvergleich
             ist Teil von TrueLabel Premium.
           </p>
           <Link href="/premium" style={{ width: "100%" }}>

@@ -19,7 +19,7 @@ export default async function ListsPage() {
           <h1 className="h-l">Deine Einkaufsliste</h1>
           <p className="body-l t2" style={{ maxWidth: 300 }}>
             Produkte direkt vom Scan auf die Liste, abhaken im Markt, als CSV
-            exportieren — Teil von TrueLabel Premium.
+            exportieren. Das gehört zu TrueLabel Premium.
           </p>
           <Link href="/premium" style={{ width: "100%" }}>
             <span className="btn btn-gold">👑 Premium entdecken</span>

@@ -18,10 +18,10 @@ function secret(): Uint8Array {
   let value = process.env.AUTH_SECRET;
   if (!value) {
     if (process.env.NODE_ENV === "production") {
-      throw new Error("AUTH_SECRET fehlt — in Produktion zwingend erforderlich.");
+      throw new Error("AUTH_SECRET fehlt. In Produktion ist es zwingend erforderlich.");
     }
     if (!warned) {
-      console.warn("[truelabel] AUTH_SECRET nicht gesetzt — Dev-Fallback aktiv.");
+      console.warn("[truelabel] AUTH_SECRET nicht gesetzt. Dev-Fallback aktiv.");
       warned = true;
     }
     value = "truelabel-dev-secret-nicht-fuer-produktion";

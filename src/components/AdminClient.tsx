@@ -123,7 +123,7 @@ export function AdminClient() {
               <div key={c.id} className="src">
                 {c.status === "accepted" ? "✅" : "✕"}{" "}
                 <span className="grow">
-                  {c.product_name ?? c.barcode} · {c.field} — {c.resolution_note}
+                  {c.product_name ?? c.barcode} · {c.field} · {c.resolution_note}
                 </span>
               </div>
             ))}
@@ -182,8 +182,8 @@ export function AdminClient() {
               {data.ai.available
                 ? "KI aktiv. Bei Erreichen des Limits degradieren Community-Features automatisch in den manuellen Modus."
                 : data.ai.reason === "no-key"
-                  ? "Kein MISTRAL_API_KEY gesetzt — KI-Features laufen im manuellen Modus."
-                  : "Budget erreicht — KI pausiert bis zum Monatswechsel."}
+                  ? "Kein MISTRAL_API_KEY gesetzt. KI-Features laufen im manuellen Modus."
+                  : "Budget erreicht. KI pausiert bis zum Monatswechsel."}
             </p>
           </div>
           <div className="card" style={{ padding: 16 }}>
