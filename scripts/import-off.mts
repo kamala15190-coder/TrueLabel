@@ -59,8 +59,16 @@ async function flush(rows: { barcode: string; name: string; brand: string; categ
     values.push(clean(r.barcode), clean(r.name), clean(r.brand), clean(r.category), cleanJson(r.data), cleanJson(r.scores), SCORE_VERSION, "off", false);
     return `($${o + 1},$${o + 2},$${o + 3},$${o + 4},$${o + 5},$${o + 6},$${o + 7},$${o + 8},$${o + 9})`;
   }).join(",");
+  // DO UPDATE nur für OFF-Produkte -> beim Voll-Lauf bekommen auch früher
+  // (mit altem Mapping) geladene Produkte die vollen Nährwerte. Seed &
+  // Community-Beiträge (andere source) bleiben unangetastet.
   const sql = `INSERT INTO products (barcode,name,brand,category,data,scores,score_version,source,verified)
-     VALUES ${tuples} ON CONFLICT (barcode) DO NOTHING`;
+     VALUES ${tuples}
+     ON CONFLICT (barcode) DO UPDATE SET
+       name = EXCLUDED.name, brand = EXCLUDED.brand, category = EXCLUDED.category,
+       data = EXCLUDED.data, scores = EXCLUDED.scores, score_version = EXCLUDED.score_version,
+       updated_at = now()
+     WHERE products.source = 'off'`;
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
       const res = await pool.query(sql, values);

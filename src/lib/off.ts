@@ -36,19 +36,38 @@ function stripLang(tag: string): string {
   return i >= 0 ? tag.slice(i + 1) : tag;
 }
 
+// Unser Feld -> OFF-Schlüssel (jeweils der _100g-Wert).
+const NUTRI_KEYS: [keyof Nutriments, string][] = [
+  ["energyKj", "energy-kj_100g"],
+  ["fat", "fat_100g"], ["satFat", "saturated-fat_100g"], ["monoFat", "monounsaturated-fat_100g"],
+  ["polyFat", "polyunsaturated-fat_100g"], ["transFat", "trans-fat_100g"],
+  ["omega3", "omega-3-fat_100g"], ["omega6", "omega-6-fat_100g"], ["cholesterol", "cholesterol_100g"],
+  ["carbs", "carbohydrates_100g"], ["sugars", "sugars_100g"], ["addedSugars", "added-sugars_100g"],
+  ["starch", "starch_100g"], ["polyols", "polyols_100g"], ["fiber", "fiber_100g"],
+  ["protein", "proteins_100g"], ["salt", "salt_100g"], ["sodium", "sodium_100g"],
+  ["alcohol", "alcohol_100g"], ["caffeine", "caffeine_100g"],
+  ["vitaminA", "vitamin-a_100g"], ["vitaminC", "vitamin-c_100g"], ["vitaminD", "vitamin-d_100g"],
+  ["vitaminE", "vitamin-e_100g"], ["vitaminK", "vitamin-k_100g"],
+  ["vitaminB1", "vitamin-b1_100g"], ["vitaminB2", "vitamin-b2_100g"], ["vitaminB3", "vitamin-pp_100g"],
+  ["vitaminB6", "vitamin-b6_100g"], ["vitaminB9", "vitamin-b9_100g"], ["vitaminB12", "vitamin-b12_100g"],
+  ["calcium", "calcium_100g"], ["iron", "iron_100g"], ["magnesium", "magnesium_100g"],
+  ["zinc", "zinc_100g"], ["potassium", "potassium_100g"], ["phosphorus", "phosphorus_100g"],
+  ["copper", "copper_100g"], ["manganese", "manganese_100g"], ["selenium", "selenium_100g"], ["iodine", "iodine_100g"],
+];
+
 function mapNutriments(n: any): Nutriments {
   if (!n) return {};
-  return {
-    energyKcal: num(n["energy-kcal_100g"]) ?? (num(n["energy_100g"]) != null ? Math.round(num(n["energy_100g"])! / 4.184) : undefined),
-    fat: num(n["fat_100g"]),
-    satFat: num(n["saturated-fat_100g"]),
-    carbs: num(n["carbohydrates_100g"]),
-    sugars: num(n["sugars_100g"]),
-    protein: num(n["proteins_100g"]),
-    salt: num(n["salt_100g"]),
-    fiber: num(n["fiber_100g"]),
-    fruitsVegPct: num(n["fruits-vegetables-nuts-estimate-from-ingredients_100g"]),
-  };
+  const out: Nutriments = {};
+  out.energyKcal =
+    num(n["energy-kcal_100g"]) ??
+    (num(n["energy_100g"]) != null ? Math.round(num(n["energy_100g"])! / 4.184) : undefined);
+  for (const [k, offk] of NUTRI_KEYS) {
+    const v = num(n[offk]);
+    if (v != null) out[k] = v;
+  }
+  if (out.vitaminB9 == null) out.vitaminB9 = num(n["folates_100g"]) ?? num(n["folate_100g"]);
+  out.fruitsVegPct = num(n["fruits-vegetables-nuts-estimate-from-ingredients_100g"]);
+  return out;
 }
 
 function mapCategory(tags: string[]): string {

@@ -23,3 +23,12 @@ export function scoreWord(score: number): string {
 /** Deutsche Zahlformatierung: 1.2 -> "1,2" */
 export const de = (n: number | undefined, digits = 1): string =>
   n == null ? "—" : n.toLocaleString("de-DE", { maximumFractionDigits: digits });
+
+/** Nährwert-Anzeige mit passender Einheit (kcal, g, oder Mikro g/mg/µg). */
+export function fmtNutri(v: number, kind: "kcal" | "macro" | "micro"): string {
+  if (kind === "kcal") return `${de(v, 0)} kcal`;
+  if (kind === "macro") return `${de(v, v < 1 ? 2 : 1)} g`;
+  if (v >= 1) return `${de(v)} g`;
+  if (v >= 0.001) return `${de(v * 1000)} mg`;
+  return `${de(v * 1_000_000, 0)} µg`;
+}

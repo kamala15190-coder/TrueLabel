@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { addLocalScan } from "@/lib/clientHistory";
 import { lookupIngredient } from "@/lib/ingredientInfo";
-import { de, scoreColor, scoreWord } from "@/lib/shared";
+import { de, fmtNutri, scoreColor, scoreWord } from "@/lib/shared";
 import { CATEGORIES, SOURCES } from "@/lib/scoring/data";
+import { NUTRI_DISPLAY } from "@/lib/types";
 import type { Factor, PersonalEntry, Product, SessionUser } from "@/lib/types";
 import { MiniRing, RingLegend, ScoreRings, SingleRing } from "./ScoreRings";
 import { Sheet } from "./Sheet";
@@ -276,13 +277,15 @@ export function ProductView({
         <span className="micro">je 100 g/ml</span>
       </div>
       <div className="nutri-table">
-        <div className="nr"><span className="t2">Energie</span><b>{de(product.nutriments.energyKcal, 0)} kcal</b></div>
-        <div className="nr"><span className="t2">Fett</span><b>{de(product.nutriments.fat)} g</b></div>
-        <div className="nr"><span className="t2">davon gesättigt</span><b>{de(product.nutriments.satFat)} g</b></div>
-        <div className="nr"><span className="t2">Kohlenhydrate</span><b>{de(product.nutriments.carbs)} g</b></div>
-        <div className="nr"><span className="t2">davon Zucker</span><b>{de(product.nutriments.sugars)} g</b></div>
-        <div className="nr"><span className="t2">Protein</span><b>{de(product.nutriments.protein)} g</b></div>
-        <div className="nr"><span className="t2">Salz</span><b>{de(product.nutriments.salt, 2)} g</b></div>
+        {NUTRI_DISPLAY.filter((d) => product.nutriments[d.key] != null).map((d) => (
+          <div className="nr" key={d.key}>
+            <span className="t2">{d.label}</span>
+            <b>{fmtNutri(product.nutriments[d.key]!, d.kind)}</b>
+          </div>
+        ))}
+        {NUTRI_DISPLAY.every((d) => product.nutriments[d.key] == null) && (
+          <div className="nr"><span className="t3">Keine Nährwertangaben hinterlegt</span></div>
+        )}
       </div>
 
       <Link href={`/correct/${product.barcode}`}>
