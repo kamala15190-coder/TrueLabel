@@ -9,8 +9,8 @@
 //   npx --yes tsx scripts/import-off.mts
 //
 // Env-Schalter:
-//   LIMIT=200000        max. einzufügende Produkte
-//   MAX_DB_MB=430       Stopp, sobald die DB so groß ist (Disk!=DB beachten)
+//   LIMIT=20000000      max. einzufügende Produkte
+//   MAX_DB_MB=18000     Stopp, sobald die DB so groß ist (Disk!=DB beachten)
 //   COUNTRIES=en:germany,en:austria,en:switzerland   ("" = weltweit)
 //   BATCH=400           Insert-Batchgröße
 //   REQUIRE_NUTRIMENTS=1  nur Produkte mit Nährwerten
@@ -23,8 +23,8 @@ import { mapOffProduct } from "../src/lib/off";
 import { computeScores, SCORE_VERSION } from "../src/lib/scoring";
 
 const DUMP = "https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz";
-const LIMIT = Number(process.env.LIMIT ?? 200000);
-const MAX_DB_BYTES = Number(process.env.MAX_DB_MB ?? 430) * 1024 * 1024;
+const LIMIT = Number(process.env.LIMIT ?? 20000000);
+const MAX_DB_BYTES = Number(process.env.MAX_DB_MB ?? 18000) * 1024 * 1024;
 const COUNTRIES = (process.env.COUNTRIES ?? "en:germany,en:austria,en:switzerland")
   .split(",").map((s) => s.trim()).filter(Boolean);
 const BATCH = Number(process.env.BATCH ?? 400);
