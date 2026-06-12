@@ -50,12 +50,26 @@ async function flush(rows: { barcode: string; name: string; brand: string; categ
     values.push(r.barcode, r.name, r.brand, r.category, JSON.stringify(r.data), JSON.stringify(r.scores), SCORE_VERSION, "off", false);
     return `($${o + 1},$${o + 2},$${o + 3},$${o + 4},$${o + 5},$${o + 6},$${o + 7},$${o + 8},$${o + 9})`;
   }).join(",");
-  const res = await pool.query(
-    `INSERT INTO products (barcode,name,brand,category,data,scores,score_version,source,verified)
-     VALUES ${tuples} ON CONFLICT (barcode) DO NOTHING`,
-    values
-  );
-  return res.rowCount ?? 0;
+  const sql = `INSERT INTO products (barcode,name,brand,category,data,scores,score_version,source,verified)
+     VALUES ${tuples} ON CONFLICT (barcode) DO NOTHING`;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      const res = await pool.query(sql, values);
+      return res.rowCount ?? 0;
+    } catch (e: unknown) {
+      const err = e as { code?: string; message?: string };
+      // Read-only (Disk-/Quota-Limit erreicht) -> nicht retrien, sauber stoppen
+      if (err.code === "25006" || /read-only/i.test(err.message ?? "")) {
+        throw new Error("DB ist read-only — Speicherlimit erreicht. Importer stoppt sauber.");
+      }
+      if (attempt === 4) {
+        console.warn("  ⚠ Batch nach 4 Versuchen übersprungen:", err.message);
+        return 0;
+      }
+      await new Promise((r) => setTimeout(r, attempt * 1500));
+    }
+  }
+  return 0;
 }
 
 async function dbBytes(): Promise<number> {
