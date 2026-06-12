@@ -10,14 +10,53 @@ export function ProfileClient({
   user,
   stats,
   stripeConfigured,
+  hasPassword,
 }: {
   user: SessionUser;
   stats: { scans: number; contributions: number; corrections: number };
   stripeConfigured: boolean;
+  hasPassword: boolean;
 }) {
   const router = useRouter();
   const [prefs, setPrefs] = useState<DietPrefs>(user.dietPrefs);
   const [saving, setSaving] = useState(false);
+
+  const [pwOpen, setPwOpen] = useState(false);
+  const [curPw, setCurPw] = useState("");
+  const [newPw, setNewPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
+  const [pwBusy, setPwBusy] = useState(false);
+  const [pwError, setPwError] = useState("");
+  const [pwDone, setPwDone] = useState(false);
+
+  const submitPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwError("");
+    setPwDone(false);
+    if (newPw !== confirmPw) {
+      setPwError("Die neuen Passwörter stimmen nicht überein.");
+      return;
+    }
+    setPwBusy(true);
+    try {
+      const res = await fetch("/api/profile/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: curPw, newPassword: newPw }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setPwError(json.error ?? "Etwas ist schiefgelaufen.");
+        return;
+      }
+      setPwDone(true);
+      setCurPw("");
+      setNewPw("");
+      setConfirmPw("");
+    } finally {
+      setPwBusy(false);
+    }
+  };
 
   const toggle = async (key: keyof DietPrefs) => {
     const next = { ...prefs, [key]: !prefs[key] };
@@ -152,6 +191,75 @@ export function ProfileClient({
             <span className="set-item"><span className="set-ic">🛡️</span><span className="grow">Admin-Panel</span><span className="chev">›</span></span>
           </Link>
         </>
+      )}
+
+      <span className="label mb12 mt24" style={{ display: "block" }}>Sicherheit</span>
+      <button
+        className="set-item"
+        type="button"
+        onClick={() => setPwOpen((v) => !v)}
+        style={{ width: "100%", textAlign: "left" }}
+      >
+        <span className="set-ic">🔑</span>
+        <span className="grow">{hasPassword ? "Passwort ändern" : "Passwort festlegen"}</span>
+        <span className="chev">{pwOpen ? "⌄" : "›"}</span>
+      </button>
+      {pwOpen && (
+        <form onSubmit={submitPassword} className="mt12 mb8">
+          {pwError && <div className="banner banner-bad mb12">{pwError}</div>}
+          {pwDone && (
+            <div className="banner banner-good mb12">Passwort gespeichert.</div>
+          )}
+          {!hasPassword && (
+            <p className="micro mb12">
+              Dein Konto wurde über Google erstellt. Lege ein Passwort fest, um dich auch
+              klassisch anmelden zu können.
+            </p>
+          )}
+          {hasPassword && (
+            <div className="field">
+              <label htmlFor="curPw">Aktuelles Passwort</label>
+              <input
+                id="curPw"
+                className="input"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={curPw}
+                onChange={(e) => setCurPw(e.target.value)}
+              />
+            </div>
+          )}
+          <div className="field">
+            <label htmlFor="newPw">Neues Passwort</label>
+            <input
+              id="newPw"
+              className="input"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              placeholder="Mindestens 8 Zeichen"
+              value={newPw}
+              onChange={(e) => setNewPw(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="confirmPw">Neues Passwort bestätigen</label>
+            <input
+              id="confirmPw"
+              className="input"
+              type="password"
+              required
+              autoComplete="new-password"
+              value={confirmPw}
+              onChange={(e) => setConfirmPw(e.target.value)}
+            />
+          </div>
+          <button className="btn btn-primary btn-sm mt8" type="submit" disabled={pwBusy}>
+            {pwBusy ? "Speichern …" : "Passwort speichern"}
+          </button>
+        </form>
       )}
 
       <span className="label mb12 mt24" style={{ display: "block" }}>Rechtliches</span>

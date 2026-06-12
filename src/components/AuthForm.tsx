@@ -105,6 +105,12 @@ export function AuthForm({
         </div>
       )}
 
+      {!isRegister && (
+        <p className="mt8" style={{ textAlign: "right" }}>
+          <Link href="/forgot" className="link micro">Passwort vergessen?</Link>
+        </p>
+      )}
+
       <button className="btn btn-primary mt8 mb16" type="submit" disabled={busy}>
         {busy ? "Einen Moment …" : isRegister ? "Registrieren" : "Anmelden"}
       </button>

@@ -67,6 +67,10 @@ export async function linkGoogle(userId: string, googleSub: string): Promise<voi
   await q(`UPDATE users SET google_sub = $1 WHERE id = $2`, [googleSub, userId]);
 }
 
+export async function setPassword(userId: string, passwordHash: string): Promise<void> {
+  await q(`UPDATE users SET password_hash = $1 WHERE id = $2`, [passwordHash, userId]);
+}
+
 export async function updateDietPrefs(userId: string, prefs: DietPrefs): Promise<void> {
   await q(`UPDATE users SET diet_prefs = $1 WHERE id = $2`, [JSON.stringify(prefs), userId]);
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ProfileClient } from "@/components/ProfileClient";
 import { getSessionUser } from "@/lib/auth";
-import { userStats } from "@/lib/repo/users";
+import { userById, userStats } from "@/lib/repo/users";
 import { stripeEnabled } from "@/lib/stripe";
 
 export const metadata: Metadata = { title: "Profil" };
@@ -38,12 +38,18 @@ export default async function ProfilePage() {
     );
   }
 
-  const stats = await userStats(user.id);
+  const [stats, row] = await Promise.all([userStats(user.id), userById(user.id)]);
+  const hasPassword = Boolean(row?.password_hash);
 
   return (
     <main className="page">
       <h1 className="h-l mb20" style={{ marginTop: 6 }}>Profil</h1>
-      <ProfileClient user={user} stats={stats} stripeConfigured={stripeEnabled()} />
+      <ProfileClient
+        user={user}
+        stats={stats}
+        stripeConfigured={stripeEnabled()}
+        hasPassword={hasPassword}
+      />
     </main>
   );
 }
