@@ -97,6 +97,23 @@ export async function updateAccount(
   await q(`UPDATE users SET ${sets.join(", ")} WHERE id = $${params.length}`, params);
 }
 
+/**
+ * Konto und alle personenbezogenen Daten endgültig entfernen.
+ * Gelöscht werden die users-Zeile (inkl. Profilbild) sowie alle Zeilen, die per
+ * user_id mit dem Konto verknüpft sind. Der gemeinsame Produktkatalog
+ * (`products`) bleibt unberührt — er gehört zur App, nicht zum Konto.
+ * Reihenfolge: erst die abhängigen Zeilen, dann das Konto.
+ */
+export async function deleteUserCompletely(userId: string): Promise<void> {
+  await q(`DELETE FROM scans WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM contributions WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM corrections WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM list_items WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM points_ledger WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM password_resets WHERE user_id = $1`, [userId]);
+  await q(`DELETE FROM users WHERE id = $1`, [userId]);
+}
+
 export async function addPoints(userId: string, delta: number, reason: string): Promise<void> {
   await q(`UPDATE users SET points = points + $1 WHERE id = $2`, [delta, userId]);
   await q(

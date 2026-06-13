@@ -56,6 +56,11 @@ export function ProfileClient({
   const [accError, setAccError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Konto-Löschung (Gefahrenzone im Bearbeiten-Sheet)
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [delBusy, setDelBusy] = useState(false);
+  const [delError, setDelError] = useState("");
+
   const [curPw, setCurPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
@@ -96,7 +101,29 @@ export function ProfileClient({
     setName(user.name);
     setAvatar(user.avatar);
     setAccError("");
+    setConfirmDelete(false);
+    setDelError("");
     setEditOpen(true);
+  };
+
+  const deleteAccount = async () => {
+    setDelError("");
+    setDelBusy(true);
+    try {
+      const res = await fetch("/api/profile/account", { method: "DELETE" });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        setDelError(json.error ?? "Löschen fehlgeschlagen.");
+        return;
+      }
+      clearLocalHistory();
+      router.push("/");
+      router.refresh();
+    } catch {
+      setDelError("Löschen fehlgeschlagen. Bitte versuche es erneut.");
+    } finally {
+      setDelBusy(false);
+    }
   };
 
   const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -401,6 +428,51 @@ export function ProfileClient({
               {pwBusy ? "Speichern …" : "Passwort speichern"}
             </button>
           </form>
+
+          <div className="sheet-sep" />
+
+          <span className="label mb12" style={{ display: "block", color: "var(--bad)" }}>
+            Gefahrenzone
+          </span>
+          {delError && <div className="banner banner-bad mb12">{delError}</div>}
+          {!confirmDelete ? (
+            <>
+              <p className="micro mb12">
+                Löscht dein Konto und alle persönlichen Daten (Profil, Profilbild, Verlauf,
+                Listen, Beiträge) unwiderruflich. Produktdaten im Katalog bleiben erhalten.
+              </p>
+              <button
+                className="btn btn-danger btn-sm"
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+              >
+                Account löschen
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="banner banner-warn mb12">
+                ⚠️ Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher?
+              </div>
+              <button
+                className="btn btn-danger btn-sm mb12"
+                type="button"
+                onClick={deleteAccount}
+                disabled={delBusy}
+              >
+                {delBusy ? "Lösche …" : "Ja, Account endgültig löschen"}
+              </button>
+              <button
+                className="link"
+                type="button"
+                style={{ display: "block" }}
+                onClick={() => setConfirmDelete(false)}
+                disabled={delBusy}
+              >
+                Abbrechen
+              </button>
+            </>
+          )}
         </Sheet>
       )}
     </div>
