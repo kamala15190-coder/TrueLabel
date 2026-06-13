@@ -14,17 +14,14 @@ export default async function HomePage() {
 
       <div className="row between mb12" style={{ marginTop: 4 }}>
         <div className="logo-mark">
-          <div className="lm-ico" style={{ width: 34, height: 34 }}>
-            <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-              <path
-                d="M8 20l8 8 16-16"
-                stroke="#fff"
-                strokeWidth="5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.svg"
+            alt="TrueLabel"
+            width={36}
+            height={36}
+            style={{ display: "block" }}
+          />
           <span className="logo-word" style={{ fontSize: 19 }}>
             True<b>Label</b>
           </span>
