@@ -215,6 +215,15 @@ export function Scanner() {
     else runZxing(stream);
   }, [runNative, runZxing]);
 
+  // Scan abbrechen: Kamera freigeben (LED aus) und zurück in den Ruhezustand.
+  const stopScan = useCallback(() => {
+    doneRef.current = true;
+    stopAll();
+    setTorchOn(false);
+    setCanTorch(false);
+    setMode("idle");
+  }, [stopAll]);
+
   const toggleTorch = useCallback(async () => {
     const track = streamRef.current?.getVideoTracks()[0];
     if (!track) return;
@@ -253,6 +262,24 @@ export function Scanner() {
           style={{ display: mode === "active" ? "block" : "none" }}
         />
         {mode === "active" && <div className="scan-line" />}
+
+        {mode === "active" && (
+          <button
+            type="button"
+            onClick={stopScan}
+            aria-label="Scan stoppen"
+            style={{
+              position: "absolute", top: 16, left: 16, zIndex: 4,
+              width: 40, height: 40, borderRadius: "50%", border: "none",
+              background: "rgba(0,0,0,.35)", color: "#fff",
+              fontSize: 16, lineHeight: 1, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              backdropFilter: "blur(6px)",
+            }}
+          >
+            ✕
+          </button>
+        )}
 
         {mode === "active" && canTorch && (
           <button
