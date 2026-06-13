@@ -76,6 +76,13 @@ export async function upsertProduct(
   return { ...data, scores, source, verified };
 }
 
+// Manche Begriffe matchen als Substring riesige Mengen (z. B. "cola" steckt
+// auch in "chocolate" → ~180k Treffer im Vollimport). Alle zu holen UND nach
+// Score zu sortieren kostet zig Sekunden. Deshalb erst die Kandidaten kappen,
+// dann unter diesen ranken: seltene Begriffe bleiben exakt, häufige werden
+// aus einer großzügigen Stichprobe bedient — beides in ~40–150 ms.
+const SEARCH_CANDIDATE_CAP = 2000;
+
 export async function searchProducts(query: string, limit = 12): Promise<Product[]> {
   // LIKE-Metazeichen im Suchbegriff entschärfen (Backslash ist Default-Escape).
   const esc = query.replace(/[\\%_]/g, (c) => `\\${c}`);
@@ -83,8 +90,11 @@ export async function searchProducts(query: string, limit = 12): Promise<Product
   // bedient (siehe scripts/optimize-search.mts) — ohne ihn wäre das ein
   // Full-Table-Scan. Treffer, die mit dem Begriff *beginnen*, ranken zuerst.
   const rows = await q<ProductRow>(
-    `SELECT * FROM products
-     WHERE name ILIKE $1 OR brand ILIKE $1
+    `SELECT * FROM (
+       SELECT * FROM products
+       WHERE name ILIKE $1 OR brand ILIKE $1
+       LIMIT ${SEARCH_CANDIDATE_CAP}
+     ) s
      ORDER BY (name ILIKE $2) DESC, verified DESC, (scores->>'total')::int DESC
      LIMIT $3`,
     [`%${esc}%`, `${esc}%`, limit]
