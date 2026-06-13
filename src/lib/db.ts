@@ -33,6 +33,9 @@ const SCHEMA: string[] = [
     diet_prefs JSONB NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`,
+  // Profilbild (kleines, clientseitig skaliertes Data-URL-JPEG) — nachrüstbar
+  // für bereits bestehende users-Tabellen.
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar TEXT`,
   `CREATE TABLE IF NOT EXISTS products (
     barcode TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -153,6 +156,40 @@ async function migrateAndSeed(driver: Driver): Promise<void> {
   if (Number(existing.rows[0]?.n ?? 0) === 0) {
     const { seedProducts } = await import("./seed");
     await seedProducts(driver);
+  }
+  // Suchindizes im Hintergrund sicherstellen — blockiert NIE die Anfragen.
+  void ensureSearchIndexes(driver);
+}
+
+// ============================================================
+// Volltext-/Substring-Suche braucht auf großen Produkttabellen einen
+// pg_trgm-GIN-Index, sonst wird `name ILIKE '%…%'` zum Full-Table-Scan
+// (Sekunden statt Millisekunden). Hier idempotent + best effort:
+//  - PGlite (Dev) kennt pg_trgm meist nicht → Fehler wird verschluckt,
+//    die wenigen Seed-Produkte sind ohnehin sofort durchsucht.
+//  - Sehr große Tabellen werden NICHT inline indiziert (das hielte eine
+//    Schreibsperre). Dafür gibt es scripts/optimize-search.mts (CONCURRENTLY).
+// ============================================================
+async function ensureSearchIndexes(driver: Driver): Promise<void> {
+  try {
+    await driver.query(`CREATE EXTENSION IF NOT EXISTS pg_trgm`);
+  } catch {
+    return; // kein pg_trgm verfügbar (z. B. PGlite) → nichts zu tun
+  }
+  try {
+    const r = await driver.query<{ n: string }>(
+      `SELECT reltuples::bigint::text AS n FROM pg_class WHERE relname = 'products'`
+    );
+    // Großes Verzeichnis: dem Migrationsskript überlassen (CONCURRENTLY).
+    if (Number(r.rows[0]?.n ?? 0) > 50000) return;
+    await driver.query(
+      `CREATE INDEX IF NOT EXISTS idx_products_name_trgm ON products USING gin (name gin_trgm_ops)`
+    );
+    await driver.query(
+      `CREATE INDEX IF NOT EXISTS idx_products_brand_trgm ON products USING gin (brand gin_trgm_ops)`
+    );
+  } catch {
+    /* nicht kritisch — Suche funktioniert auch ohne Index, nur langsamer */
   }
 }
 

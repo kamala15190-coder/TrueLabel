@@ -197,6 +197,8 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string;
+  /** Profilbild als Data-URL (clientseitig skaliert), sonst null. */
+  avatar: string | null;
   role: "user" | "admin";
   points: number;
   premium: boolean;

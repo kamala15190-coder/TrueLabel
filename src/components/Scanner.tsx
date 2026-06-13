@@ -235,7 +235,7 @@ export function Scanner() {
   const isError = mode === "denied" || mode === "insecure" || mode === "nocam";
 
   return (
-    <div>
+    <div className="scan-stage">
       <div
         className="viewfinder"
         onClick={mode === "idle" ? startCamera : undefined}

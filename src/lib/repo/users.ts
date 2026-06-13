@@ -13,6 +13,7 @@ export interface UserRow {
   premium_until: string | Date | null;
   stripe_customer_id: string | null;
   diet_prefs: DietPrefs | string;
+  avatar: string | null;
 }
 
 export function toSessionUser(row: UserRow): SessionUser {
@@ -23,6 +24,7 @@ export function toSessionUser(row: UserRow): SessionUser {
     id: row.id,
     email: row.email,
     name: row.name,
+    avatar: row.avatar ?? null,
     role: row.role === "admin" ? "admin" : "user",
     points: row.points,
     premium: row.role === "admin" || (premiumUntil != null && premiumUntil > new Date()),
@@ -73,6 +75,26 @@ export async function setPassword(userId: string, passwordHash: string): Promise
 
 export async function updateDietPrefs(userId: string, prefs: DietPrefs): Promise<void> {
   await q(`UPDATE users SET diet_prefs = $1 WHERE id = $2`, [JSON.stringify(prefs), userId]);
+}
+
+/** Name und/oder Profilbild ändern. `avatar: null` entfernt das Bild. */
+export async function updateAccount(
+  userId: string,
+  fields: { name?: string; avatar?: string | null }
+): Promise<void> {
+  const sets: string[] = [];
+  const params: unknown[] = [];
+  if (fields.name !== undefined) {
+    params.push(fields.name);
+    sets.push(`name = $${params.length}`);
+  }
+  if (fields.avatar !== undefined) {
+    params.push(fields.avatar);
+    sets.push(`avatar = $${params.length}`);
+  }
+  if (sets.length === 0) return;
+  params.push(userId);
+  await q(`UPDATE users SET ${sets.join(", ")} WHERE id = $${params.length}`, params);
 }
 
 export async function addPoints(userId: string, delta: number, reason: string): Promise<void> {

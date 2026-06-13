@@ -359,6 +359,20 @@ textarea.input { height: auto; padding: 15px 18px; line-height: 1.55; resize: no
 .fake-barcode { display: flex; gap: 3px; align-items: flex-end; height: 72px; opacity: 0.5; }
 .fake-barcode i { width: 3px; background: var(--leaf-deep); border-radius: 1px; display: block; }
 
+/* Scan-/Startseite: füllt genau eine Bildschirmhöhe — kein Scrollen.
+   Die Kamera-Karte ist das einzige flexible Element und schrumpft/wächst
+   mit dem verfügbaren Platz, statt fix hoch zu sein. */
+.page.scan-home {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+.scan-home .scan-hero { flex: 0 0 auto; margin: 10px 0 14px; }
+.scan-home .scan-stage { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; justify-content: center; }
+.scan-home .scan-stage .viewfinder { aspect-ratio: auto; flex: 1 1 auto; min-height: 168px; max-height: 56dvh; }
+.scan-home .scan-foot { flex: 0 0 auto; margin-top: 14px; }
+
 /* Spinner */
 .spinner { width: 46px; height: 46px; border-radius: 50%; border: 4px solid var(--leaf-wash); border-top-color: var(--leaf); animation: spin 0.9s linear infinite; margin: 0 auto; }
 .spinner.sm { width: 22px; height: 22px; border-width: 3px; margin: 0; }
@@ -383,6 +397,12 @@ textarea.input { height: auto; padding: 15px 18px; line-height: 1.55; resize: no
 .set-ic { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(150deg, #fff, var(--leaf-wash)); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
 
 .avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(150deg, var(--leaf-bright), var(--leaf)); display: flex; align-items: center; justify-content: center; font-family: var(--head); font-size: 25px; font-weight: 600; color: #fff; flex-shrink: 0; box-shadow: var(--sh-leaf); }
+.avatar-tap { position: relative; border: none; padding: 0; cursor: pointer; overflow: visible; transition: transform 0.2s var(--ease); }
+.avatar-tap:active { transform: scale(0.95); }
+.avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.avatar-pencil { position: absolute; right: -2px; bottom: -2px; width: 26px; height: 26px; border-radius: 50%; background: #fff; color: var(--leaf); display: flex; align-items: center; justify-content: center; font-size: 13px; box-shadow: var(--sh-soft); }
+.profile-name-btn { display: block; background: none; border: none; padding: 0; color: var(--ink); cursor: pointer; text-align: left; }
+.sheet-sep { height: 1px; background: var(--hair-2); margin: 24px 0 18px; }
 
 /* Premium */
 .feat { display: flex; gap: 13px; align-items: flex-start; padding: 13px 0; }

@@ -183,7 +183,9 @@ export async function searchOffProducts(query: string, limit = 8): Promise<Produ
     `&search_simple=1&action=process&json=1&page_size=${limit}&fields=${FIELDS}&lc=de&cc=de`;
   const res = await fetch(url, {
     headers: { "User-Agent": userAgent() },
-    signal: AbortSignal.timeout(8000),
+    // Kürzeres Timeout: OFF ist nur der Fallback, wenn die eigene DB zu
+    // wenige Treffer hat — die Suche darf darauf nicht lange hängen.
+    signal: AbortSignal.timeout(5000),
     cache: "no-store",
   });
   if (!res.ok) return [];

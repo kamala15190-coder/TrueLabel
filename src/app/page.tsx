@@ -9,10 +9,10 @@ export default async function HomePage() {
   const user = await getSessionUser();
 
   return (
-    <main className="page">
+    <main className="page scan-home">
       <Onboarding />
 
-      <div className="row between mb16" style={{ marginTop: 4 }}>
+      <div className="row between mb12" style={{ marginTop: 4 }}>
         <div className="logo-mark">
           <div className="lm-ico" style={{ width: 34, height: 34 }}>
             <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
@@ -40,12 +40,12 @@ export default async function HomePage() {
         )}
       </div>
 
-      <div className="mt12 mb20">
+      <div className="scan-hero">
         <h1 className="h-xl">
           Was steckt<br />
           <em style={{ color: "var(--leaf)" }}>wirklich</em> drin?
         </h1>
-        <p className="body-l t2 mt12" style={{ maxWidth: 320 }}>
+        <p className="body-m t2 mt8" style={{ maxWidth: 320 }}>
           Ein Scan genügt. In Sekunden siehst du, wie gesund, nachhaltig und
           fair dein Essen wirklich ist.
         </p>
@@ -53,7 +53,7 @@ export default async function HomePage() {
 
       <Scanner />
 
-      <p className="micro center mt24">
+      <p className="micro center scan-foot">
         Unbegrenzte Scans · Kostenlos · Keine Werbung
       </p>
     </main>

@@ -2,9 +2,36 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { clearLocalHistory } from "@/lib/clientHistory";
 import { DIET_PREF_LABELS, type DietPrefs, type SessionUser } from "@/lib/types";
+import { Sheet } from "./Sheet";
+
+// Gewähltes Bild clientseitig auf ein quadratisches 256px-JPEG eindampfen,
+// damit nur ein kompaktes Data-URL in die DB wandert.
+async function fileToAvatar(file: File): Promise<string> {
+  const dataUrl: string = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result as string);
+    r.onerror = () => rej(new Error("read"));
+    r.readAsDataURL(file);
+  });
+  const img: HTMLImageElement = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = () => rej(new Error("decode"));
+    i.src = dataUrl;
+  });
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return dataUrl;
+  const s = Math.min(img.width, img.height); // mittiger Quadrat-Zuschnitt
+  ctx.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
+  return canvas.toDataURL("image/jpeg", 0.82);
+}
 
 export function ProfileClient({
   user,
@@ -21,7 +48,14 @@ export function ProfileClient({
   const [prefs, setPrefs] = useState<DietPrefs>(user.dietPrefs);
   const [saving, setSaving] = useState(false);
 
-  const [pwOpen, setPwOpen] = useState(false);
+  // Profil-bearbeiten-Sheet (Foto + Name + Passwort)
+  const [editOpen, setEditOpen] = useState(false);
+  const [name, setName] = useState(user.name);
+  const [avatar, setAvatar] = useState<string | null>(user.avatar);
+  const [accBusy, setAccBusy] = useState(false);
+  const [accError, setAccError] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const [curPw, setCurPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
@@ -55,6 +89,55 @@ export function ProfileClient({
       setConfirmPw("");
     } finally {
       setPwBusy(false);
+    }
+  };
+
+  const openEdit = () => {
+    setName(user.name);
+    setAvatar(user.avatar);
+    setAccError("");
+    setEditOpen(true);
+  };
+
+  const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // gleiche Datei erneut wählbar
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setAccError("Bitte wähle eine Bilddatei.");
+      return;
+    }
+    setAccError("");
+    try {
+      setAvatar(await fileToAvatar(file));
+    } catch {
+      setAccError("Das Bild konnte nicht verarbeitet werden.");
+    }
+  };
+
+  const saveAccount = async () => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      setAccError("Bitte gib einen Namen ein.");
+      return;
+    }
+    setAccError("");
+    setAccBusy(true);
+    try {
+      const res = await fetch("/api/profile/account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: trimmed, avatar }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setAccError(json.error ?? "Speichern fehlgeschlagen.");
+        return;
+      }
+      setEditOpen(false);
+      router.refresh();
+    } finally {
+      setAccBusy(false);
     }
   };
 
@@ -95,9 +178,12 @@ export function ProfileClient({
   return (
     <div>
       <div className="row gap16 mb20">
-        <div className="avatar">{initials}</div>
+        <button type="button" className="avatar avatar-tap" onClick={openEdit} aria-label="Profil bearbeiten">
+          {user.avatar ? <img src={user.avatar} alt="" className="avatar-img" /> : initials}
+          <span className="avatar-pencil" aria-hidden>✎</span>
+        </button>
         <div className="grow">
-          <div className="h-m">{user.name}</div>
+          <button type="button" className="h-m profile-name-btn" onClick={openEdit}>{user.name}</button>
           <p className="body-m t2" style={{ wordBreak: "break-all" }}>{user.email}</p>
           {user.premium && <span className="badge badge-gold mt8">👑 Premium aktiv</span>}
         </div>
@@ -193,75 +279,6 @@ export function ProfileClient({
         </>
       )}
 
-      <span className="label mb12 mt24" style={{ display: "block" }}>Sicherheit</span>
-      <button
-        className="set-item"
-        type="button"
-        onClick={() => setPwOpen((v) => !v)}
-        style={{ width: "100%", textAlign: "left" }}
-      >
-        <span className="set-ic">🔑</span>
-        <span className="grow">{hasPassword ? "Passwort ändern" : "Passwort festlegen"}</span>
-        <span className="chev">{pwOpen ? "⌄" : "›"}</span>
-      </button>
-      {pwOpen && (
-        <form onSubmit={submitPassword} className="mt12 mb8">
-          {pwError && <div className="banner banner-bad mb12">{pwError}</div>}
-          {pwDone && (
-            <div className="banner banner-good mb12">Passwort gespeichert.</div>
-          )}
-          {!hasPassword && (
-            <p className="micro mb12">
-              Dein Konto wurde über Google erstellt. Lege ein Passwort fest, um dich auch
-              klassisch anmelden zu können.
-            </p>
-          )}
-          {hasPassword && (
-            <div className="field">
-              <label htmlFor="curPw">Aktuelles Passwort</label>
-              <input
-                id="curPw"
-                className="input"
-                type="password"
-                required
-                autoComplete="current-password"
-                value={curPw}
-                onChange={(e) => setCurPw(e.target.value)}
-              />
-            </div>
-          )}
-          <div className="field">
-            <label htmlFor="newPw">Neues Passwort</label>
-            <input
-              id="newPw"
-              className="input"
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              placeholder="Mindestens 8 Zeichen"
-              value={newPw}
-              onChange={(e) => setNewPw(e.target.value)}
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="confirmPw">Neues Passwort bestätigen</label>
-            <input
-              id="confirmPw"
-              className="input"
-              type="password"
-              required
-              autoComplete="new-password"
-              value={confirmPw}
-              onChange={(e) => setConfirmPw(e.target.value)}
-            />
-          </div>
-          <button className="btn btn-primary btn-sm mt8" type="submit" disabled={pwBusy}>
-            {pwBusy ? "Speichern …" : "Passwort speichern"}
-          </button>
-        </form>
-      )}
-
       <span className="label mb12 mt24" style={{ display: "block" }}>Rechtliches</span>
       <Link href="/legal/datenschutz"><span className="set-item"><span className="set-ic">🔒</span><span className="grow">Datenschutzerklärung</span><span className="chev">›</span></span></Link>
       <Link href="/legal/agb"><span className="set-item"><span className="set-ic">📄</span><span className="grow">Nutzungsbedingungen</span><span className="chev">›</span></span></Link>
@@ -270,6 +287,122 @@ export function ProfileClient({
       <button className="btn btn-danger btn-sm mt24" onClick={logout}>
         Abmelden
       </button>
+
+      {editOpen && (
+        <Sheet onClose={() => setEditOpen(false)}>
+          <h2 className="h-m mb20">Profil bearbeiten</h2>
+
+          <div className="row gap16 mb20">
+            <button
+              type="button"
+              className="avatar avatar-tap"
+              style={{ width: 88, height: 88, fontSize: 30 }}
+              onClick={() => fileRef.current?.click()}
+              aria-label="Foto wählen"
+            >
+              {avatar ? <img src={avatar} alt="" className="avatar-img" /> : initials}
+              <span className="avatar-pencil" aria-hidden>✎</span>
+            </button>
+            <div className="grow">
+              <button
+                type="button"
+                className="btn btn-subtle btn-sm"
+                style={{ width: "auto", padding: "0 18px" }}
+                onClick={() => fileRef.current?.click()}
+              >
+                Foto wählen
+              </button>
+              {avatar && (
+                <button
+                  type="button"
+                  className="link mt12"
+                  style={{ display: "block" }}
+                  onClick={() => setAvatar(null)}
+                >
+                  Foto entfernen
+                </button>
+              )}
+            </div>
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickFile} />
+
+          <div className="field">
+            <label htmlFor="acc-name">Name</label>
+            <input
+              id="acc-name"
+              className="input"
+              value={name}
+              maxLength={60}
+              autoComplete="name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          {accError && <div className="banner banner-bad mb12">{accError}</div>}
+          <button className="btn btn-primary" onClick={saveAccount} disabled={accBusy}>
+            {accBusy ? "Speichern …" : "Speichern"}
+          </button>
+
+          <div className="sheet-sep" />
+
+          <span className="label mb12" style={{ display: "block" }}>
+            {hasPassword ? "Passwort ändern" : "Passwort festlegen"}
+          </span>
+          <form onSubmit={submitPassword}>
+            {pwError && <div className="banner banner-bad mb12">{pwError}</div>}
+            {pwDone && <div className="banner banner-good mb12">Passwort gespeichert.</div>}
+            {!hasPassword && (
+              <p className="micro mb12">
+                Dein Konto wurde über Google erstellt. Lege ein Passwort fest, um dich auch
+                klassisch anmelden zu können.
+              </p>
+            )}
+            {hasPassword && (
+              <div className="field">
+                <label htmlFor="curPw">Aktuelles Passwort</label>
+                <input
+                  id="curPw"
+                  className="input"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  value={curPw}
+                  onChange={(e) => setCurPw(e.target.value)}
+                />
+              </div>
+            )}
+            <div className="field">
+              <label htmlFor="newPw">Neues Passwort</label>
+              <input
+                id="newPw"
+                className="input"
+                type="password"
+                required
+                minLength={8}
+                autoComplete="new-password"
+                placeholder="Mindestens 8 Zeichen"
+                value={newPw}
+                onChange={(e) => setNewPw(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="confirmPw">Neues Passwort bestätigen</label>
+              <input
+                id="confirmPw"
+                className="input"
+                type="password"
+                required
+                autoComplete="new-password"
+                value={confirmPw}
+                onChange={(e) => setConfirmPw(e.target.value)}
+              />
+            </div>
+            <button className="btn btn-primary btn-sm mt8" type="submit" disabled={pwBusy}>
+              {pwBusy ? "Speichern …" : "Passwort speichern"}
+            </button>
+          </form>
+        </Sheet>
+      )}
     </div>
   );
 }

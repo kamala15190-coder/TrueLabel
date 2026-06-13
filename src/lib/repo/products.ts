@@ -77,12 +77,17 @@ export async function upsertProduct(
 }
 
 export async function searchProducts(query: string, limit = 12): Promise<Product[]> {
+  // LIKE-Metazeichen im Suchbegriff entschärfen (Backslash ist Default-Escape).
+  const esc = query.replace(/[\\%_]/g, (c) => `\\${c}`);
+  // Die `%term%`-Filter werden auf großen Tabellen vom pg_trgm-GIN-Index
+  // bedient (siehe scripts/optimize-search.mts) — ohne ihn wäre das ein
+  // Full-Table-Scan. Treffer, die mit dem Begriff *beginnen*, ranken zuerst.
   const rows = await q<ProductRow>(
     `SELECT * FROM products
      WHERE name ILIKE $1 OR brand ILIKE $1
-     ORDER BY verified DESC, (scores->>'total')::int DESC
-     LIMIT $2`,
-    [`%${query}%`, limit]
+     ORDER BY (name ILIKE $2) DESC, verified DESC, (scores->>'total')::int DESC
+     LIMIT $3`,
+    [`%${esc}%`, `${esc}%`, limit]
   );
   return rows.map(rowToProduct);
 }
